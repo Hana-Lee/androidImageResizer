@@ -8,10 +8,51 @@
     <packaging>jar</packaging>
 
     <name>androidImageResizer</name>
-    <url>http://maven.apache.org</url>
+
+    <description>Simple image resizer for android resource images.</description>
+    <url>http://voyaging.github.io/androidImageResizer/</url>
+
+    <inceptionYear>2013</inceptionYear>
+
+    <developers>
+        <developer>
+            <id>voyaging</id>
+            <name>Hana Lee</name>
+            <email>voyaging.hana@gmail.com</email>
+            <url>https://github.com/voyaging</url>
+            <roles>
+                <role>project lead</role>
+                <role>developer</role>
+            </roles>
+            <organization>eyeQMC</organization>
+            <timezone>+9</timezone>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>http://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>eyeQMC</name>
+        <url>http://www.eyeq.co.kr</url>
+    </organization>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/voyaging/androidImageResizer/issues/</url>
+    </issueManagement>
+    <scm>
+        <url>https://github.com/voyaging/androidImageResizer</url>
+        <connection>scm:git:git://github.com/voyaging/androidImageResizer.git</connection>
+        <developerConnection>scm:git:git@github.com:voyaging/androidImageResizer.git</developerConnection>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <github.global.server>github</github.global.server>
     </properties>
 
     <dependencies>
