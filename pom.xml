@@ -1,72 +1,108 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>kr.co.hanalee</groupId>
-    <artifactId>androidImageResizer</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+	<groupId>kr.co.hanalee</groupId>
+	<artifactId>androidImageResizer</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-    <name>androidImageResizer</name>
+	<name>androidImageResizer</name>
 
-    <description>Simple image resizer for android resource images.</description>
-    <url>http://voyaging.github.io/androidImageResizer/</url>
+	<description>Simple image resizer for android resource images.</description>
+	<url>http://voyaging.github.io/androidImageResizer/</url>
 
-    <inceptionYear>2013</inceptionYear>
+	<inceptionYear>2013</inceptionYear>
 
-    <developers>
-        <developer>
-            <id>voyaging</id>
-            <name>Hana Lee</name>
-            <email>voyaging.hana@gmail.com</email>
-            <url>https://github.com/voyaging</url>
-            <roles>
-                <role>project lead</role>
-                <role>developer</role>
-            </roles>
-            <organization>eyeQMC</organization>
-            <timezone>+9</timezone>
-        </developer>
-    </developers>
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>http://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <organization>
-        <name>eyeQMC</name>
-        <url>http://www.eyeq.co.kr</url>
-    </organization>
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/voyaging/androidImageResizer/issues/</url>
-    </issueManagement>
-    <scm>
-        <url>https://github.com/voyaging/androidImageResizer</url>
-        <connection>scm:git:git://github.com/voyaging/androidImageResizer.git</connection>
-        <developerConnection>scm:git:git@github.com:voyaging/androidImageResizer.git</developerConnection>
-    </scm>
+	<developers>
+		<developer>
+			<id>voyaging</id>
+			<name>Hana Lee</name>
+			<email>voyaging.hana@gmail.com</email>
+			<url>https://github.com/voyaging</url>
+			<roles>
+				<role>project lead</role>
+				<role>developer</role>
+			</roles>
+			<organization>eyeQMC</organization>
+			<timezone>+9</timezone>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>MIT</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<organization>
+		<name>eyeQMC</name>
+		<url>http://www.eyeq.co.kr</url>
+	</organization>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/voyaging/androidImageResizer/issues/</url>
+	</issueManagement>
+	<scm>
+		<url>https://github.com/voyaging/androidImageResizer</url>
+		<connection>scm:git:git://github.com/voyaging/androidImageResizer.git</connection>
+		<developerConnection>scm:git:git@github.com:voyaging/androidImageResizer.git</developerConnection>
+	</scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <github.global.server>github</github.global.server>
-    </properties>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								<addClasspath>true</addClasspath>
+								<mainClass>kr.co.hanalee.Resizer</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>dev.eyeq.co.kr</id>
-            <url>http://dev.eyeq.co.kr/artifactory/repo</url>
-        </repository>
-    </repositories>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<github.global.server>github</github.global.server>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>3.1</version>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>dev.eyeq.co.kr</id>
+			<url>http://dev.eyeq.co.kr/artifactory/repo</url>
+		</repository>
+	</repositories>
 </project>
