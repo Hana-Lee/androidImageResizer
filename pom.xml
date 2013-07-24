@@ -71,7 +71,7 @@
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 								<addClasspath>true</addClasspath>
-								<mainClass>kr.co.hanalee.Resizer</mainClass>
+								<mainClass>kr.co.hanalee.main.Resizer</mainClass>
 							</manifest>
 						</archive>
 					</configuration>
