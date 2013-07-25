@@ -6,11 +6,24 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -19,7 +32,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
@@ -29,6 +44,9 @@ import javax.swing.border.EtchedBorder;
 public class MainWindow {
 
 	private JFrame mainWindow;
+	private JPanel imageFileListPanel;
+	private JList<String> imageFileList;
+	private final Action action = new DirOpenAction();
 
 	/**
 	 * Launch the application.
@@ -78,7 +96,10 @@ public class MainWindow {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
-		JMenuItem mntmOpenFile = new JMenuItem("Open File");
+		JMenuItem mntmOpenFile = new JMenuItem("Open Dir");
+		mntmOpenFile.setAction(action);
+		mntmOpenFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+				InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenFile);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -184,7 +205,7 @@ public class MainWindow {
 		mainWindow.getContentPane().add(previewPanel);
 		previewPanel.setLayout(new GridLayout(1, 2, 0, 0));
 
-		JPanel imageFileListPanel = new JPanel();
+		imageFileListPanel = new JPanel();
 		imageFileListPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
 				null, null, null));
 		imageFileListPanel.setBackground(Color.PINK);
@@ -194,11 +215,14 @@ public class MainWindow {
 		JLabel imageListLabel = new JLabel("Image List");
 		imageFileListPanel.add(imageListLabel);
 
-		JList<String> imageFileList = new JList<String>();
+		imageFileList = new JList<String>();
+		imageFileList.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		imageFileList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
-		imageFileList.setPreferredSize(new Dimension(370, 350));
-		imageFileListPanel.add(imageFileList);
+
+		JScrollPane scrollPane = new JScrollPane(imageFileList);
+		scrollPane.setPreferredSize(new Dimension(370, 350));
+		imageFileListPanel.add(scrollPane);
 
 		JPanel previewImagePanel = new JPanel();
 		previewImagePanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
@@ -243,4 +267,53 @@ public class MainWindow {
 		selectedImagePreviewPanel.add(selectedImageLabel);
 	}
 
+	protected class DirOpenAction extends AbstractAction {
+
+		private static final long serialVersionUID = -6298572972089576940L;
+
+		public DirOpenAction() {
+			putValue(NAME, "Open");
+			putValue(SHORT_DESCRIPTION, "Open files or directory");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser fileDlg = new JFileChooser();
+			fileDlg.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			fileDlg.setFileFilter(new ImageFilter());
+			fileDlg.setMultiSelectionEnabled(true);
+			fileDlg.setAcceptAllFileFilterUsed(false);
+			fileDlg.setFileView(new ImageFileView());
+			fileDlg.setAccessory(new ImagePreview(fileDlg));
+
+			int result = fileDlg.showOpenDialog(null);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File[] imgFiles = fileDlg.getSelectedFiles();
+				if (imgFiles != null) {
+					DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
+					for (File imgFile : imgFiles) {
+						try {
+							BufferedImage myPicture = ImageIO.read(imgFile);
+							ImageIcon icon = new ImageIcon(myPicture);
+							int height = icon.getIconHeight();
+							int width = icon.getIconWidth();
+							StringBuilder sb = new StringBuilder();
+							sb.append("name : ");
+							sb.append(imgFile.getName());
+							sb.append(" | ");
+							sb.append("size : ");
+							sb.append(width);
+							sb.append(" x ");
+							sb.append(height);
+							defaultListModel.addElement(sb.toString());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+
+					imageFileList.setModel(defaultListModel);
+				}
+			}
+		}
+	}
 }
