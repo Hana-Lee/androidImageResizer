@@ -11,15 +11,14 @@ import java.awt.Toolkit;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -59,6 +58,7 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		mainWindow = new JFrame();
+		mainWindow.setResizable(false);
 		mainWindow.setTitle("Image Resizer");
 		mainWindow
 				.setIconImage(Toolkit
@@ -137,41 +137,41 @@ public class MainWindow {
 		JLabel imageSourceLabel = new JLabel("Source Select");
 		dpiPanel.add(imageSourceLabel);
 
-		JSeparator separator_5 = new JSeparator();
-		separator_5.setPreferredSize(new Dimension(2, 10));
-		separator_5.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator_5);
+		JSeparator separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
 
 		dpiPanel.add(ldpiRadioBtn);
 
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setPreferredSize(new Dimension(2, 10));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		dpiPanel.add(separator);
 		dpiPanel.add(mdpiRadioBtn);
 
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setPreferredSize(new Dimension(2, 10));
-		separator_1.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator_1);
+		separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
 		dpiPanel.add(hdpiRadioBtn);
 
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setPreferredSize(new Dimension(2, 10));
-		separator_2.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator_2);
+		separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
 		dpiPanel.add(xhdpiRadioBtn);
 
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setPreferredSize(new Dimension(2, 10));
-		separator_3.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator_3);
+		separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
 		dpiPanel.add(xxhdpiRadioBtn);
 
-		JSeparator separator_4 = new JSeparator();
-		separator_4.setPreferredSize(new Dimension(2, 10));
-		separator_4.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator_4);
+		separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
 		dpiPanel.add(tvdpiRadioBtn);
 
 		Button resizeBtn = new Button("Resize");
@@ -184,139 +184,63 @@ public class MainWindow {
 		mainWindow.getContentPane().add(previewPanel);
 		previewPanel.setLayout(new GridLayout(1, 2, 0, 0));
 
-		JPanel originalImagePanel = new JPanel();
-		originalImagePanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
+		JPanel imageFileListPanel = new JPanel();
+		imageFileListPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
 				null, null, null));
-		originalImagePanel.setBackground(Color.PINK);
-		previewPanel.add(originalImagePanel);
-		originalImagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		imageFileListPanel.setBackground(Color.PINK);
+		previewPanel.add(imageFileListPanel);
+		imageFileListPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setPreferredSize(new Dimension(370, 370));
-		originalImagePanel.add(scrollPane);
+		JLabel imageListLabel = new JLabel("Image List");
+		imageFileListPanel.add(imageListLabel);
 
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBackground(Color.WHITE);
-		scrollPane.setColumnHeaderView(lblNewLabel);
+		JList<String> imageFileList = new JList<String>();
+		imageFileList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
+				null));
+		imageFileList.setPreferredSize(new Dimension(370, 350));
+		imageFileListPanel.add(imageFileList);
 
-		JPanel panel = new JPanel();
-		panel.setSize(new Dimension(340, 1));
-		panel.setPreferredSize(new Dimension(340, 10));
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel.setAutoscrolls(true);
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		scrollPane.setViewportView(panel);
-
-		JLabel lblNewLabel_2 = new JLabel("Image Icon1");
-		lblNewLabel_2.setAlignmentX(Component.CENTER_ALIGNMENT);
-		ImageIcon imageIcon = new ImageIcon(
-				"C:\\Users\\Hana\\Dropbox\\study\\android\\pinkmini\\imgs\\20130722\\런쳐3.png");
-		lblNewLabel_2.setIcon(imageIcon);
-		lblNewLabel_2.setPreferredSize(new Dimension(40, 30));
-
-		panel.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("Image Icon2");
-		panel.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("New label");
-		panel.add(lblNewLabel_4);
-
-		JLabel lblNewLabel_5 = new JLabel("New label");
-		panel.add(lblNewLabel_5);
-
-		JLabel lblNewLabel_8 = new JLabel("New label");
-		panel.add(lblNewLabel_8);
-
-		JLabel lblNewLabel_6 = new JLabel("New label");
-		panel.add(lblNewLabel_6);
-
-		JLabel lblNewLabel_7 = new JLabel("New label");
-		panel.add(lblNewLabel_7);
-
-		JLabel label = new JLabel("Image Icon1");
-		label.setIcon(new ImageIcon(
-				"C:\\Users\\Hana\\Dropbox\\study\\android\\pinkmini\\imgs\\20130722\\런쳐3.png"));
-		label.setPreferredSize(new Dimension(40, 130));
-		label.setAlignmentX(0.5f);
-		panel.add(label);
-
-		JLabel label_1 = new JLabel("Image Icon1");
-		label_1.setPreferredSize(new Dimension(40, 30));
-		label_1.setAlignmentX(0.5f);
-		panel.add(label_1);
-
-		JLabel label_2 = new JLabel("Image Icon1");
-		label_2.setPreferredSize(new Dimension(40, 30));
-		label_2.setAlignmentX(0.5f);
-		panel.add(label_2);
-
-		JLabel label_3 = new JLabel("Image Icon1");
-		label_3.setPreferredSize(new Dimension(40, 130));
-		label_3.setAlignmentX(0.5f);
-		panel.add(label_3);
-
-		JLabel label_4 = new JLabel("Image Icon1");
-		label_4.setPreferredSize(new Dimension(80, 130));
-		label_4.setAlignmentX(0.5f);
-		panel.add(label_4);
-
-		JLabel label_5 = new JLabel("Image Icon1");
-		label_5.setPreferredSize(new Dimension(80, 130));
-		label_5.setAlignmentX(0.5f);
-		panel.add(label_5);
-
-		JLabel label_7 = new JLabel("Image Icon1");
-		label_7.setPreferredSize(new Dimension(80, 130));
-		label_7.setAlignmentX(0.5f);
-		panel.add(label_7);
-
-		JLabel label_8 = new JLabel("Image Icon1");
-		label_8.setPreferredSize(new Dimension(80, 130));
-		label_8.setAlignmentX(0.5f);
-		panel.add(label_8);
-
-		JLabel label_10 = new JLabel("Image Icon1");
-		label_10.setPreferredSize(new Dimension(80, 130));
-		label_10.setAlignmentX(0.5f);
-		panel.add(label_10);
-
-		JLabel label_9 = new JLabel("Image Icon1");
-		label_9.setPreferredSize(new Dimension(80, 130));
-		label_9.setAlignmentX(0.5f);
-		panel.add(label_9);
-
-		JLabel label_12 = new JLabel("Image Icon1");
-		label_12.setPreferredSize(new Dimension(80, 130));
-		label_12.setAlignmentX(0.5f);
-		panel.add(label_12);
-
-		JLabel label_11 = new JLabel("Image Icon1");
-		label_11.setPreferredSize(new Dimension(80, 130));
-		label_11.setAlignmentX(0.5f);
-		panel.add(label_11);
-
-		JLabel label_6 = new JLabel("Image Icon1");
-		label_6.setPreferredSize(new Dimension(80, 130));
-		label_6.setAlignmentX(0.5f);
-		panel.add(label_6);
-
-		JPanel resizeImagePanel = new JPanel();
-		resizeImagePanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
+		JPanel previewImagePanel = new JPanel();
+		previewImagePanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null,
 				null, null, null));
-		resizeImagePanel.setBackground(Color.ORANGE);
-		previewPanel.add(resizeImagePanel);
+		previewImagePanel.setBackground(Color.ORANGE);
+		previewPanel.add(previewImagePanel);
+		previewImagePanel.setLayout(new BoxLayout(previewImagePanel,
+				BoxLayout.PAGE_AXIS));
 
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setPreferredSize(new Dimension(370, 370));
-		resizeImagePanel.add(scrollPane_1);
+		JPanel selectedImageLabelPanel = new JPanel();
+		selectedImageLabelPanel.setMaximumSize(new Dimension(400, 26));
+		selectedImageLabelPanel.setPreferredSize(new Dimension(400, 26));
+		selectedImageLabelPanel.setBackground(Color.ORANGE);
+		previewImagePanel.add(selectedImageLabelPanel);
 
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		scrollPane_1.setColumnHeaderView(lblNewLabel_1);
+		JLabel previewLabel = new JLabel("Selected Image Preview");
+		selectedImageLabelPanel.add(previewLabel);
+		previewLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		previewLabel.setBorder(null);
+		previewLabel.setAlignmentX(0.5f);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setPreferredSize(new Dimension(340, 10));
-		scrollPane_1.setViewportView(panel_1);
+		JPanel previewImageParentPanel = new JPanel();
+		previewImageParentPanel.setBackground(Color.ORANGE);
+		FlowLayout fl_previewImageParentPanel = (FlowLayout) previewImageParentPanel
+				.getLayout();
+		fl_previewImageParentPanel.setVgap(0);
+		previewImageParentPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
+		previewImageParentPanel.setPreferredSize(new Dimension(370, 350));
+		previewImagePanel.add(previewImageParentPanel);
+
+		JPanel selectedImagePreviewPanel = new JPanel();
+		selectedImagePreviewPanel.setBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null));
+		selectedImagePreviewPanel.setPreferredSize(new Dimension(370, 350));
+		previewImageParentPanel.add(selectedImagePreviewPanel);
+		selectedImagePreviewPanel.setLayout(new BoxLayout(
+				selectedImagePreviewPanel, BoxLayout.PAGE_AXIS));
+
+		JLabel selectedImageLabel = new JLabel("");
+		selectedImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		selectedImagePreviewPanel.add(selectedImageLabel);
 	}
 
 }
