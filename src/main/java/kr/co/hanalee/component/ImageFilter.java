@@ -38,7 +38,7 @@ import javax.swing.filechooser.FileFilter;
 import kr.co.hanalee.util.Utils;
 
 /* ImageFilter.java is used by FileChooserDemo2.java. */
-public class ImageFilter extends FileFilter {
+public class ImageFilter extends FileFilter implements java.io.FileFilter {
 
 	// Accept all directories and all gif, jpg, tiff, or png files.
 	public boolean accept(File f) {

@@ -73,6 +73,7 @@ public class MainWindow {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * Window Builder Generate
 	 */
 	private void initialize() {
 		mainWindow = new JFrame();
@@ -288,32 +289,45 @@ public class MainWindow {
 			int result = fileDlg.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File[] imgFiles = fileDlg.getSelectedFiles();
-				if (imgFiles != null) {
-					DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
-					for (File imgFile : imgFiles) {
-						try {
-							BufferedImage myPicture = ImageIO.read(imgFile);
-							ImageIcon icon = new ImageIcon(myPicture);
-							int height = icon.getIconHeight();
-							int width = icon.getIconWidth();
-							StringBuilder sb = new StringBuilder();
-							sb.append("name : ");
-							sb.append(imgFile.getName());
-							sb.append(" | ");
-							sb.append("size : ");
-							sb.append(width);
-							sb.append(" x ");
-							sb.append(height);
-							defaultListModel.addElement(sb.toString());
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+				if (imgFiles != null && imgFiles.length > 0) {
+					if (imgFiles.length == 1 && imgFiles[0].isDirectory()) {
+						imgFiles = imgFiles[0].listFiles(new ImageFilter());
 					}
-
-					imageFileList.setModel(defaultListModel);
+					makeImageList(imgFiles);
 				}
 			}
+		}
+
+		protected void makeImageList(File[] imgFiles) {
+			DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
+			for (File imgFile : imgFiles) {
+				try {
+					if (imgFile.isDirectory()) {
+						continue;
+					}
+					defaultListModel.addElement(getImageInformation(imgFile));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			imageFileList.setModel(defaultListModel);
+		}
+
+		protected String getImageInformation(File imgFile) throws IOException {
+			BufferedImage myPicture = ImageIO.read(imgFile);
+			ImageIcon icon = new ImageIcon(myPicture);
+			int height = icon.getIconHeight();
+			int width = icon.getIconWidth();
+			StringBuilder sb = new StringBuilder();
+			sb.append("name : ");
+			sb.append(imgFile.getName());
+			sb.append(" | ");
+			sb.append("size : ");
+			sb.append(width);
+			sb.append(" x ");
+			sb.append(height);
+			return sb.toString();
 		}
 	}
 }
