@@ -32,7 +32,7 @@ public class ScalablePane extends JPanel {
 	 * @param master
 	 */
 	public ScalablePane(Image master) {
-		this(master, false);
+		this(master, true);
 	}
 
 	/**
