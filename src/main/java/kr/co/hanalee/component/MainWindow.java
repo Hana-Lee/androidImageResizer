@@ -70,8 +70,10 @@ public class MainWindow {
 
 	private JFrame mainWindow;
 	private JPanel imageFileListPanel;
-	private JList<String> imageFileList;
-	private DefaultListModel<File> imgFileListModel;
+	@SuppressWarnings("rawtypes")
+	private JList imageFileList;
+	@SuppressWarnings("rawtypes")
+	private DefaultListModel imgFileListModel;
 	private JPanel previewImageParentPanel;
 	private ButtonGroup dpiButtonGroup;
 	private final Action action = new DirOpenAction();
@@ -121,6 +123,7 @@ public class MainWindow {
 	/**
 	 * Initialize the contents of the frame. Window Builder Generate
 	 */
+	@SuppressWarnings("rawtypes")
 	private void initialize() {
 		dpisCalModel = new LinkedHashMap<String, List<Double>>();
 		List<Double> dp = new ArrayList<Double>();
@@ -303,7 +306,7 @@ public class MainWindow {
 		JLabel imageListLabel = new JLabel("Image List");
 		imageFileListPanel.add(imageListLabel);
 
-		imageFileList = new JList<String>();
+		imageFileList = new JList();
 		imageFileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		imageFileList.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		imageFileList.addMouseListener(new ImageFileListActionMouseListener());
@@ -374,6 +377,7 @@ public class MainWindow {
 		/**
 		 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
 		 */
+		@SuppressWarnings("unchecked")
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (imgFileListModel == null) {
@@ -387,7 +391,8 @@ public class MainWindow {
 							"Please select original image dpi", "Wraning",
 							JOptionPane.WARNING_MESSAGE);
 				} else if (!selectedDpi.equals("ldpi")) {
-					Enumeration<File> imgFiles = imgFileListModel.elements();
+					Enumeration<File> imgFiles = (Enumeration<File>) imgFileListModel
+							.elements();
 					boolean result = imageResize(imgFiles, selectedDpi);
 					if (result) {
 						JOptionPane.showMessageDialog(mainWindow,
@@ -527,11 +532,11 @@ public class MainWindow {
 
 	protected class ImageFileListActionMouseListener extends MouseAdapter {
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			@SuppressWarnings("unchecked")
-			JList<String> fileList = (JList<String>) e.getSource();
-			final File imgFile = imgFileListModel.getElementAt(fileList
+			JList fileList = (JList) e.getSource();
+			final File imgFile = (File) imgFileListModel.getElementAt(fileList
 					.getSelectedIndex());
 
 			BufferedImage selectedImage = null;
@@ -592,9 +597,10 @@ public class MainWindow {
 		/**
 		 * @param imgFiles
 		 */
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		protected void makeImageList(File[] imgFiles) {
-			DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
-			imgFileListModel = new DefaultListModel<File>();
+			DefaultListModel defaultListModel = new DefaultListModel();
+			imgFileListModel = new DefaultListModel();
 			for (File imgFile : imgFiles) {
 				try {
 					if (imgFile.isDirectory()) {
