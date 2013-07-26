@@ -40,6 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.ListSelectionModel;
 
 public class MainWindow {
 
@@ -217,6 +218,7 @@ public class MainWindow {
 		imageFileListPanel.add(imageListLabel);
 
 		imageFileList = new JList<String>();
+		imageFileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		imageFileList.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		imageFileList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
