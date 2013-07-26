@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -17,6 +18,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -32,6 +35,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -55,6 +59,7 @@ public class MainWindow {
 	private DefaultListModel<File> imgFileListModel;
 	private JPanel previewImageParentPanel;
 	private final Action action = new DirOpenAction();
+	private static final String DEFAULT_FONT = "Arial";
 
 	/**
 	 * Launch the application.
@@ -79,10 +84,36 @@ public class MainWindow {
 		initialize();
 	}
 
+	protected String getDefaultFontName() {
+		GraphicsEnvironment e = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		Font[] fonts = e.getAllFonts(); // Get the fonts
+		List<String> fontNames = new ArrayList<String>();
+		for (Font font : fonts) {
+			fontNames.add(font.getName());
+		}
+
+		if (fontNames.contains("나눔고딕")) {
+			return "나눔고딕";
+		}
+		if (fontNames.contains("맑은 고딕")) {
+			return "맑은 고딕";
+		}
+		if (fontNames.contains("굴림")) {
+			return "굴림";
+		}
+		return DEFAULT_FONT;
+	}
+
 	/**
 	 * Initialize the contents of the frame. Window Builder Generate
 	 */
 	private void initialize() {
+		UIManager.put("OptionPane.font", getDefaultFontName());
+		UIManager.put("Label.font", getDefaultFontName());
+		UIManager.put("Button.font", getDefaultFontName());
+		UIManager.put("FileChooser.font", getDefaultFontName());
+
 		mainWindow = new JFrame();
 		mainWindow.setResizable(false);
 		mainWindow.setTitle("Image Resizer");
@@ -204,6 +235,7 @@ public class MainWindow {
 
 		Button resizeBtn = new Button("Resize");
 		resizeBtn.setPreferredSize(new Dimension(70, 25));
+		resizeBtn.addMouseListener(new ConvertButtonActionMouseListener());
 		buttonsPanel.add(resizeBtn);
 
 		JPanel previewPanel = new JPanel();
@@ -225,7 +257,7 @@ public class MainWindow {
 		imageFileList = new JList<String>();
 		imageFileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		imageFileList.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-		imageFileList.addMouseListener(new ActionMouseListener());
+		imageFileList.addMouseListener(new ImageFileListActionMouseListener());
 		imageFileList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 
@@ -265,7 +297,18 @@ public class MainWindow {
 				previewImageParentPanel, BoxLayout.LINE_AXIS));
 	}
 
-	protected class ActionMouseListener extends MouseAdapter {
+	protected class ConvertButtonActionMouseListener extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.out.println(e.getClickCount());
+			JOptionPane.showMessageDialog(mainWindow, "선택해주삼", "헐...",
+					JOptionPane.WARNING_MESSAGE);
+			super.mouseClicked(e);
+		}
+	}
+
+	protected class ImageFileListActionMouseListener extends MouseAdapter {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
