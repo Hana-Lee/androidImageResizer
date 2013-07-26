@@ -78,6 +78,7 @@ public class MainWindow {
 	private static final String DEFAULT_FONT = "Arial";
 	private Map<String, List<Double>> dpisCalModel;
 	private List<String> dpisModel;
+	private final Action action_1 = new ExitAction();
 
 	/**
 	 * Create the application.
@@ -186,20 +187,17 @@ public class MainWindow {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
-		JMenuItem mntmOpenFile = new JMenuItem("Open Dir");
+		JMenuItem mntmOpenFile = new JMenuItem("Open");
 		mntmOpenFile.setAction(action);
 		mntmOpenFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				InputEvent.CTRL_MASK));
 		mnFile.add(mntmOpenFile);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.setAction(action_1);
+		mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
+				InputEvent.CTRL_MASK));
 		mnFile.add(mntmExit);
-
-		JMenu mnSetting = new JMenu("Setting");
-		menuBar.add(mnSetting);
-
-		JMenuItem mntmSettings = new JMenuItem("Preferences");
-		mnSetting.add(mntmSettings);
 
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
@@ -369,7 +367,7 @@ public class MainWindow {
 
 	/**
 	 * @author HanaLee <voyaging.hana@gmail.com>
-	 *
+	 * 
 	 */
 	protected class ConvertButtonActionMouseListener extends MouseAdapter {
 
@@ -378,13 +376,17 @@ public class MainWindow {
 		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			String selectedDpi = getDpiSelectedButtonText();
-			if (StringUtils.isBlank(selectedDpi)) {
+			if (imgFileListModel == null) {
 				JOptionPane.showMessageDialog(mainWindow,
-						"Please select original image dpi", "Wraning",
-						JOptionPane.WARNING_MESSAGE);
-			} else if (!selectedDpi.equals("ldpi")) {
-				if (imgFileListModel != null) {
+						"Please select image files or directory", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				String selectedDpi = getDpiSelectedButtonText();
+				if (StringUtils.isBlank(selectedDpi)) {
+					JOptionPane.showMessageDialog(mainWindow,
+							"Please select original image dpi", "Wraning",
+							JOptionPane.WARNING_MESSAGE);
+				} else if (!selectedDpi.equals("ldpi")) {
 					Enumeration<File> imgFiles = imgFileListModel.elements();
 					boolean result = imageResize(imgFiles, selectedDpi);
 					if (result) {
@@ -396,15 +398,11 @@ public class MainWindow {
 								"Image resize work fail.", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
-				} else {
+				} else if (selectedDpi.equals("ldpi")) {
 					JOptionPane.showMessageDialog(mainWindow,
-							"Please select image files or directory", "Error",
+							"Do not resize ldpi images", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
-			} else if (selectedDpi.equals("ldpi")) {
-				JOptionPane.showMessageDialog(mainWindow,
-						"Do not resize ldpi images", "Error",
-						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -555,7 +553,7 @@ public class MainWindow {
 
 	/**
 	 * @author HanaLee <voyaging.hana@gmail.com>
-	 *
+	 * 
 	 */
 	protected class DirOpenAction extends AbstractAction {
 
@@ -631,6 +629,26 @@ public class MainWindow {
 			sb.append(" x ");
 			sb.append(height);
 			return sb.toString();
+		}
+	}
+
+	private class ExitAction extends AbstractAction {
+
+		private static final long serialVersionUID = 5184695362515645756L;
+
+		public ExitAction() {
+			putValue(NAME, "Exit");
+			putValue(SHORT_DESCRIPTION, "Programe exit");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			String message = "Are You Sure to Close this Application?";
+			String title = "Exit Confirmation";
+			int reply = JOptionPane.showConfirmDialog(mainWindow, message,
+					title, JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
 		}
 	}
 }
