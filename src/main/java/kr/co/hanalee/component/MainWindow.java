@@ -19,10 +19,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -51,6 +56,8 @@ import javax.swing.border.EtchedBorder;
 import kr.co.hanalee.util.ImageScalablePanelFactory;
 import kr.co.hanalee.util.ScalablePane;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class MainWindow {
 
 	private JFrame mainWindow;
@@ -58,6 +65,7 @@ public class MainWindow {
 	private JList<String> imageFileList;
 	private DefaultListModel<File> imgFileListModel;
 	private JPanel previewImageParentPanel;
+	private ButtonGroup dpiButtonGroup;
 	private final Action action = new DirOpenAction();
 	private static final String DEFAULT_FONT = "Arial";
 
@@ -185,7 +193,7 @@ public class MainWindow {
 
 		JRadioButton tvdpiRadioBtn = new JRadioButton("tvdpi");
 
-		ButtonGroup dpiButtonGroup = new ButtonGroup();
+		dpiButtonGroup = new ButtonGroup();
 		dpiButtonGroup.add(ldpiRadioBtn);
 		dpiButtonGroup.add(mdpiRadioBtn);
 		dpiButtonGroup.add(hdpiRadioBtn);
@@ -297,15 +305,101 @@ public class MainWindow {
 				previewImageParentPanel, BoxLayout.LINE_AXIS));
 	}
 
+	public String getSelectedButtonText() {
+		Enumeration<AbstractButton> buttons = dpiButtonGroup.getElements();
+		if (buttons == null || !buttons.hasMoreElements()) {
+			return null;
+		}
+		while (buttons.hasMoreElements()) {
+			AbstractButton button = buttons.nextElement();
+
+			if (button.isSelected()) {
+				return button.getText();
+			}
+		}
+
+		return null;
+	}
+
 	protected class ConvertButtonActionMouseListener extends MouseAdapter {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			System.out.println(e.getClickCount());
-			JOptionPane.showMessageDialog(mainWindow, "선택해주삼", "헐...",
-					JOptionPane.WARNING_MESSAGE);
-			super.mouseClicked(e);
+			String selectedDpi = getSelectedButtonText();
+			if (StringUtils.isBlank(selectedDpi)) {
+				JOptionPane.showMessageDialog(mainWindow,
+						"Please select original image dpi", "Wraning",
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				if (imgFileListModel != null) {
+					Enumeration<File> imgFiles = imgFileListModel.elements();
+					boolean result = imageResize(imgFiles, selectedDpi);
+					if (result) {
+						JOptionPane.showMessageDialog(mainWindow,
+								"Image resize work done.", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(mainWindow,
+								"Image resize work fail.", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
 		}
+	}
+
+	protected boolean imageResize(Enumeration<File> imgFiles, String selectedDpi) {
+		if (imgFiles == null) {
+			return false;
+		}
+		boolean result = false;
+		while (imgFiles.hasMoreElements()) {
+			File imgFile = imgFiles.nextElement();
+			BufferedImage oriImage = null;
+			try {
+				oriImage = ImageIO.read(imgFile);
+
+				if (oriImage != null) {
+					BufferedImage newImage = reCalculateSize(oriImage,
+							selectedDpi);
+					String newDirectoryName = imgFile.getParent()
+							+ File.separator + "hdpi";
+
+					File outputDir = new File(newDirectoryName);
+					if (!outputDir.exists() && !outputDir.mkdir()) {
+						JOptionPane.showMessageDialog(mainWindow,
+								"Make directory failed", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
+
+					File outputFile = new File(newDirectoryName,
+							imgFile.getName());
+
+					ImageInputStream iis = ImageIO
+							.createImageInputStream(imgFile);
+					Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
+
+					if (iter != null && iter.hasNext()) {
+						ImageReader reader = iter.next();
+						ImageIO.write(newImage, reader.getFormatName(),
+								outputFile);
+						result = true;
+					}
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				return false;
+			}
+		}
+		return result;
+	}
+
+	protected BufferedImage reCalculateSize(BufferedImage image,
+			String selectedDpi) {
+		int oWidth = image.getWidth();
+		int oHeight = image.getHeight();
+		return image;
 	}
 
 	protected class ImageFileListActionMouseListener extends MouseAdapter {
