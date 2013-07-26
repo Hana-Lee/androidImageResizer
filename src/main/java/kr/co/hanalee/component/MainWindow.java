@@ -3,11 +3,12 @@ package kr.co.hanalee.component;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -20,8 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -58,6 +62,10 @@ import kr.co.hanalee.util.ScalablePane;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * @author HanaLee <voyaging.hana@gmail.com>
+ * 
+ */
 public class MainWindow {
 
 	private JFrame mainWindow;
@@ -68,22 +76,8 @@ public class MainWindow {
 	private ButtonGroup dpiButtonGroup;
 	private final Action action = new DirOpenAction();
 	private static final String DEFAULT_FONT = "Arial";
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainWindow window = new MainWindow();
-					window.mainWindow.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Map<String, List<Double>> dpisCalModel;
+	private List<String> dpisModel;
 
 	/**
 	 * Create the application.
@@ -92,6 +86,16 @@ public class MainWindow {
 		initialize();
 	}
 
+	/**
+	 * @return
+	 */
+	public JFrame getMainWindow() {
+		return mainWindow;
+	}
+
+	/**
+	 * @return
+	 */
 	protected String getDefaultFontName() {
 		GraphicsEnvironment e = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
@@ -117,6 +121,46 @@ public class MainWindow {
 	 * Initialize the contents of the frame. Window Builder Generate
 	 */
 	private void initialize() {
+		dpisCalModel = new LinkedHashMap<String, List<Double>>();
+		List<Double> dp = new ArrayList<Double>();
+		dp.add(1.5);
+		dp.add(2.0);
+		dp.add(3.007518796992481);
+		dp.add(4.0);
+		dpisCalModel.put("xxhdpi", dp);
+
+		dp = new ArrayList<Double>();
+		dp.add(1.333333333333333);
+		dp.add(2.0);
+		dp.add(1.503759398496241);
+		dp.add(2.666666666666666);
+		dpisCalModel.put("xhdpi", dp);
+
+		dp = new ArrayList<Double>();
+		dp.add(1.5);
+		dp.add(1.12781954887218);
+		dp.add(2.0);
+		dpisCalModel.put("hdpi", dp);
+
+		dp = new ArrayList<Double>();
+		dp.add(1.33);
+		dp.add(1.333333333333333);
+		dpisCalModel.put("mdpi", dp);
+
+		dp = new ArrayList<Double>();
+		dp.add(1.773333333333333);
+		dpisCalModel.put("tvdpi", dp);
+
+		dpisCalModel.put("ldpi", null);
+
+		dpisModel = new ArrayList<String>();
+		dpisModel.add("xxhdpi");
+		dpisModel.add("xhdpi");
+		dpisModel.add("hdpi");
+		dpisModel.add("mdpi");
+		dpisModel.add("tvdpi");
+		dpisModel.add("ldpi");
+
 		UIManager.put("OptionPane.font", getDefaultFontName());
 		UIManager.put("Label.font", getDefaultFontName());
 		UIManager.put("Button.font", getDefaultFontName());
@@ -195,11 +239,11 @@ public class MainWindow {
 
 		dpiButtonGroup = new ButtonGroup();
 		dpiButtonGroup.add(ldpiRadioBtn);
+		dpiButtonGroup.add(tvdpiRadioBtn);
 		dpiButtonGroup.add(mdpiRadioBtn);
 		dpiButtonGroup.add(hdpiRadioBtn);
 		dpiButtonGroup.add(xhdpiRadioBtn);
 		dpiButtonGroup.add(xxhdpiRadioBtn);
-		dpiButtonGroup.add(tvdpiRadioBtn);
 
 		JLabel imageSourceLabel = new JLabel("Source Select");
 		dpiPanel.add(imageSourceLabel);
@@ -208,8 +252,13 @@ public class MainWindow {
 		separator.setPreferredSize(new Dimension(2, 10));
 		separator.setOrientation(SwingConstants.VERTICAL);
 		dpiPanel.add(separator);
-
 		dpiPanel.add(ldpiRadioBtn);
+
+		separator = new JSeparator();
+		separator.setPreferredSize(new Dimension(2, 10));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		dpiPanel.add(separator);
+		dpiPanel.add(tvdpiRadioBtn);
 
 		separator = new JSeparator();
 		separator.setPreferredSize(new Dimension(2, 10));
@@ -234,12 +283,6 @@ public class MainWindow {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		dpiPanel.add(separator);
 		dpiPanel.add(xxhdpiRadioBtn);
-
-		separator = new JSeparator();
-		separator.setPreferredSize(new Dimension(2, 10));
-		separator.setOrientation(SwingConstants.VERTICAL);
-		dpiPanel.add(separator);
-		dpiPanel.add(tvdpiRadioBtn);
 
 		Button resizeBtn = new Button("Resize");
 		resizeBtn.setPreferredSize(new Dimension(70, 25));
@@ -305,7 +348,10 @@ public class MainWindow {
 				previewImageParentPanel, BoxLayout.LINE_AXIS));
 	}
 
-	public String getSelectedButtonText() {
+	/**
+	 * @return
+	 */
+	public String getDpiSelectedButtonText() {
 		Enumeration<AbstractButton> buttons = dpiButtonGroup.getElements();
 		if (buttons == null || !buttons.hasMoreElements()) {
 			return null;
@@ -321,16 +367,23 @@ public class MainWindow {
 		return null;
 	}
 
+	/**
+	 * @author HanaLee <voyaging.hana@gmail.com>
+	 *
+	 */
 	protected class ConvertButtonActionMouseListener extends MouseAdapter {
 
+		/**
+		 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			String selectedDpi = getSelectedButtonText();
+			String selectedDpi = getDpiSelectedButtonText();
 			if (StringUtils.isBlank(selectedDpi)) {
 				JOptionPane.showMessageDialog(mainWindow,
 						"Please select original image dpi", "Wraning",
 						JOptionPane.WARNING_MESSAGE);
-			} else {
+			} else if (!selectedDpi.equals("ldpi")) {
 				if (imgFileListModel != null) {
 					Enumeration<File> imgFiles = imgFileListModel.elements();
 					boolean result = imageResize(imgFiles, selectedDpi);
@@ -343,48 +396,85 @@ public class MainWindow {
 								"Image resize work fail.", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
+				} else {
+					JOptionPane.showMessageDialog(mainWindow,
+							"Please select image files or directory", "Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
+			} else if (selectedDpi.equals("ldpi")) {
+				JOptionPane.showMessageDialog(mainWindow,
+						"Do not resize ldpi images", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
 
+	/**
+	 * @param imgFiles
+	 * @param selectedDpi
+	 * @return
+	 */
 	protected boolean imageResize(Enumeration<File> imgFiles, String selectedDpi) {
 		if (imgFiles == null) {
 			return false;
 		}
+
+		int idx = dpisModel.indexOf(selectedDpi);
+		for (int i = 0; i <= idx; i++) {
+			dpisModel.remove(0);
+		}
+
 		boolean result = false;
 		while (imgFiles.hasMoreElements()) {
 			File imgFile = imgFiles.nextElement();
 			BufferedImage oriImage = null;
 			try {
 				oriImage = ImageIO.read(imgFile);
-
 				if (oriImage != null) {
-					BufferedImage newImage = reCalculateSize(oriImage,
-							selectedDpi);
-					String newDirectoryName = imgFile.getParent()
-							+ File.separator + "hdpi";
-
-					File outputDir = new File(newDirectoryName);
-					if (!outputDir.exists() && !outputDir.mkdir()) {
-						JOptionPane.showMessageDialog(mainWindow,
-								"Make directory failed", "Error",
-								JOptionPane.ERROR_MESSAGE);
-						return false;
-					}
-
-					File outputFile = new File(newDirectoryName,
-							imgFile.getName());
-
 					ImageInputStream iis = ImageIO
 							.createImageInputStream(imgFile);
 					Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
 
+					ImageReader reader = null;
 					if (iter != null && iter.hasNext()) {
-						ImageReader reader = iter.next();
-						ImageIO.write(newImage, reader.getFormatName(),
-								outputFile);
-						result = true;
+						reader = iter.next();
+					}
+
+					Map<String, Integer> dimension = null;
+
+					int count = 0;
+					for (String dpi : dpisModel) {
+						String newDirectoryName = imgFile.getParent()
+								+ File.separator + dpi;
+
+						File outputDir = new File(newDirectoryName);
+						if (!outputDir.exists() && !outputDir.mkdir()) {
+							JOptionPane.showMessageDialog(mainWindow,
+									"Make directory failed", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return false;
+						}
+
+						File outputFile = new File(newDirectoryName,
+								imgFile.getName());
+
+						dimension = reCalculateSize(
+								oriImage.getWidth(),
+								oriImage.getHeight(),
+								dpisCalModel.get(selectedDpi).get(count),
+								selectedDpi.equals("mdpi") && count == 0 ? false
+										: true);
+
+						Image newImage = oriImage.getScaledInstance(
+								dimension.get("width"),
+								dimension.get("height"), Image.SCALE_SMOOTH);
+
+						result = ImageIO.write(
+								convertingImageToBufferedImage(newImage,
+										dimension.get("width"),
+										dimension.get("height")), reader
+										.getFormatName(), outputFile);
+						count++;
 					}
 				}
 			} catch (IOException ex) {
@@ -395,11 +485,46 @@ public class MainWindow {
 		return result;
 	}
 
-	protected BufferedImage reCalculateSize(BufferedImage image,
-			String selectedDpi) {
-		int oWidth = image.getWidth();
-		int oHeight = image.getHeight();
-		return image;
+	/**
+	 * @param width
+	 * @param height
+	 * @param number
+	 * @param div
+	 * @return
+	 */
+	protected Map<String, Integer> reCalculateSize(int width, int height,
+			double number, boolean div) {
+		Double widthResult = null;
+		Double heightResul = null;
+		if (div) {
+			widthResult = width / number;
+			heightResul = height / number;
+		} else {
+			widthResult = width * number;
+			heightResul = height * number;
+		}
+		Long lwResult = Math.round(widthResult);
+		Long lhResult = Math.round(heightResul);
+		Map<String, Integer> dimension = new HashMap<String, Integer>();
+		dimension.put("width", lwResult.intValue());
+		dimension.put("height", lhResult.intValue());
+		return dimension;
+	}
+
+	/**
+	 * @param image
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	protected BufferedImage convertingImageToBufferedImage(Image image,
+			int width, int height) {
+		BufferedImage after = new BufferedImage(width, height,
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics bg = after.getGraphics();
+		bg.drawImage(image, 0, 0, null);
+		bg.dispose();
+		return after;
 	}
 
 	protected class ImageFileListActionMouseListener extends MouseAdapter {
@@ -428,6 +553,10 @@ public class MainWindow {
 		}
 	}
 
+	/**
+	 * @author HanaLee <voyaging.hana@gmail.com>
+	 *
+	 */
 	protected class DirOpenAction extends AbstractAction {
 
 		private static final long serialVersionUID = -6298572972089576940L;
@@ -437,6 +566,10 @@ public class MainWindow {
 			putValue(SHORT_DESCRIPTION, "Open files or directory");
 		}
 
+		/**
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fileDlg = new JFileChooser();
 			fileDlg.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -458,6 +591,9 @@ public class MainWindow {
 			}
 		}
 
+		/**
+		 * @param imgFiles
+		 */
 		protected void makeImageList(File[] imgFiles) {
 			DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
 			imgFileListModel = new DefaultListModel<File>();
@@ -476,6 +612,11 @@ public class MainWindow {
 			imageFileList.setModel(defaultListModel);
 		}
 
+		/**
+		 * @param imgFile
+		 * @return
+		 * @throws IOException
+		 */
 		protected String getImageInformation(File imgFile) throws IOException {
 			BufferedImage image = ImageIO.read(imgFile);
 			ImageIcon icon = new ImageIcon(image);
