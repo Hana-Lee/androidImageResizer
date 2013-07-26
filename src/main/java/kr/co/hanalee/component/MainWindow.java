@@ -2,16 +2,18 @@ package kr.co.hanalee.component;
 
 import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -35,18 +37,23 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.ListSelectionModel;
+
+import kr.co.hanalee.util.ImageScalablePanelFactory;
+import kr.co.hanalee.util.ScalablePane;
 
 public class MainWindow {
 
 	private JFrame mainWindow;
 	private JPanel imageFileListPanel;
 	private JList<String> imageFileList;
+	private DefaultListModel<File> imgFileListModel;
+	private JPanel previewImageParentPanel;
 	private final Action action = new DirOpenAction();
 
 	/**
@@ -73,8 +80,7 @@ public class MainWindow {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
-	 * Window Builder Generate
+	 * Initialize the contents of the frame. Window Builder Generate
 	 */
 	private void initialize() {
 		mainWindow = new JFrame();
@@ -86,7 +92,6 @@ public class MainWindow {
 						.getImage(
 								MainWindow.class
 										.getResource("/com/sun/java/swing/plaf/motif/icons/DesktopIcon.gif")));
-		mainWindow.setMinimumSize(new Dimension(500, 500));
 		mainWindow.setPreferredSize(new Dimension(800, 500));
 		mainWindow.setBounds(100, 100, 450, 300);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -220,6 +225,7 @@ public class MainWindow {
 		imageFileList = new JList<String>();
 		imageFileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		imageFileList.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+		imageFileList.addMouseListener(new ActionMouseListener());
 		imageFileList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
 				null));
 
@@ -248,26 +254,41 @@ public class MainWindow {
 		previewLabel.setBorder(null);
 		previewLabel.setAlignmentX(0.5f);
 
-		JPanel previewImageParentPanel = new JPanel();
-		previewImageParentPanel.setBackground(Color.ORANGE);
-		FlowLayout fl_previewImageParentPanel = (FlowLayout) previewImageParentPanel
-				.getLayout();
-		fl_previewImageParentPanel.setVgap(0);
-		previewImageParentPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
+		previewImageParentPanel = new JPanel();
+		previewImageParentPanel.setMaximumSize(new Dimension(370, 350));
+		previewImageParentPanel.setBackground(SystemColor.info);
+		previewImageParentPanel.setBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null));
 		previewImageParentPanel.setPreferredSize(new Dimension(370, 350));
 		previewImagePanel.add(previewImageParentPanel);
+		previewImageParentPanel.setLayout(new BoxLayout(
+				previewImageParentPanel, BoxLayout.LINE_AXIS));
+	}
 
-		JPanel selectedImagePreviewPanel = new JPanel();
-		selectedImagePreviewPanel.setBorder(new EtchedBorder(
-				EtchedBorder.LOWERED, null, null));
-		selectedImagePreviewPanel.setPreferredSize(new Dimension(370, 350));
-		previewImageParentPanel.add(selectedImagePreviewPanel);
-		selectedImagePreviewPanel.setLayout(new BoxLayout(
-				selectedImagePreviewPanel, BoxLayout.PAGE_AXIS));
+	protected class ActionMouseListener extends MouseAdapter {
 
-		JLabel selectedImageLabel = new JLabel("");
-		selectedImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		selectedImagePreviewPanel.add(selectedImageLabel);
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			@SuppressWarnings("unchecked")
+			JList<String> fileList = (JList<String>) e.getSource();
+			final File imgFile = imgFileListModel.getElementAt(fileList
+					.getSelectedIndex());
+
+			BufferedImage selectedImage = null;
+			try {
+				selectedImage = ImageIO.read(imgFile);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+
+			if (selectedImage != null) {
+				ScalablePane component = ImageScalablePanelFactory
+						.create(selectedImage);
+				previewImageParentPanel.removeAll();
+				previewImageParentPanel.add(component);
+				previewImageParentPanel.revalidate();
+			}
+		}
 	}
 
 	protected class DirOpenAction extends AbstractAction {
@@ -302,11 +323,13 @@ public class MainWindow {
 
 		protected void makeImageList(File[] imgFiles) {
 			DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
+			imgFileListModel = new DefaultListModel<File>();
 			for (File imgFile : imgFiles) {
 				try {
 					if (imgFile.isDirectory()) {
 						continue;
 					}
+					imgFileListModel.addElement(imgFile);
 					defaultListModel.addElement(getImageInformation(imgFile));
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -317,8 +340,8 @@ public class MainWindow {
 		}
 
 		protected String getImageInformation(File imgFile) throws IOException {
-			BufferedImage myPicture = ImageIO.read(imgFile);
-			ImageIcon icon = new ImageIcon(myPicture);
+			BufferedImage image = ImageIO.read(imgFile);
+			ImageIcon icon = new ImageIcon(image);
 			int height = icon.getIconHeight();
 			int width = icon.getIconWidth();
 			StringBuilder sb = new StringBuilder();
