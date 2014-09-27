@@ -1,66 +1,21 @@
 package kr.co.hanalee.component;
 
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.SystemColor;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import kr.co.hanalee.util.*;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import javax.swing.AbstractAction;
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-
-import kr.co.hanalee.util.ImageScalablePanelFactory;
-import kr.co.hanalee.util.ScalablePane;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author HanaLee <voyaging.hana@gmail.com>
@@ -68,6 +23,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class MainWindow {
 
+	private static final String DEFAULT_FONT = "Arial";
+	private final Action action = new DirOpenAction();
+	private final Action action_1 = new ExitAction();
 	private JFrame mainWindow;
 	private JPanel imageFileListPanel;
 	@SuppressWarnings("rawtypes")
@@ -76,11 +34,6 @@ public class MainWindow {
 	private DefaultListModel imgFileListModel;
 	private JPanel previewImageParentPanel;
 	private ButtonGroup dpiButtonGroup;
-	private final Action action = new DirOpenAction();
-	private static final String DEFAULT_FONT = "Arial";
-	private Map<String, List<Double>> dpisCalModel;
-	private List<String> dpisModel;
-	private final Action action_1 = new ExitAction();
 
 	/**
 	 * Create the application.
@@ -125,46 +78,6 @@ public class MainWindow {
 	 */
 	@SuppressWarnings("rawtypes")
 	private void initialize() {
-		dpisCalModel = new LinkedHashMap<String, List<Double>>();
-		List<Double> dp = new ArrayList<Double>();
-		dp.add(1.5);
-		dp.add(2.0);
-		dp.add(3.007518796992481);
-		dp.add(4.0);
-		dpisCalModel.put("xxhdpi", dp);
-
-		dp = new ArrayList<Double>();
-		dp.add(1.333333333333333);
-		dp.add(2.0);
-		dp.add(1.503759398496241);
-		dp.add(2.666666666666666);
-		dpisCalModel.put("xhdpi", dp);
-
-		dp = new ArrayList<Double>();
-		dp.add(1.5);
-		dp.add(1.12781954887218);
-		dp.add(2.0);
-		dpisCalModel.put("hdpi", dp);
-
-		dp = new ArrayList<Double>();
-		dp.add(1.33);
-		dp.add(1.333333333333333);
-		dpisCalModel.put("mdpi", dp);
-
-		dp = new ArrayList<Double>();
-		dp.add(1.773333333333333);
-		dpisCalModel.put("tvdpi", dp);
-
-		dpisCalModel.put("ldpi", null);
-
-		dpisModel = new ArrayList<String>();
-		dpisModel.add("xxhdpi");
-		dpisModel.add("xhdpi");
-		dpisModel.add("hdpi");
-		dpisModel.add("mdpi");
-		dpisModel.add("tvdpi");
-		dpisModel.add("ldpi");
-
 		UIManager.put("OptionPane.font", getDefaultFontName());
 		UIManager.put("Label.font", getDefaultFontName());
 		UIManager.put("Button.font", getDefaultFontName());
@@ -226,17 +139,17 @@ public class MainWindow {
 		dpiPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		buttonsPanel.add(dpiPanel);
 
-		JRadioButton ldpiRadioBtn = new JRadioButton("ldpi");
+		JRadioButton ldpiRadioBtn = new JRadioButton(DPIName.ldpi.getName());
 
-		JRadioButton mdpiRadioBtn = new JRadioButton("mdpi");
+		JRadioButton mdpiRadioBtn = new JRadioButton(DPIName.mdpi.getName());
 
-		JRadioButton hdpiRadioBtn = new JRadioButton("hdpi");
+		JRadioButton hdpiRadioBtn = new JRadioButton(DPIName.hdpi.getName());
 
-		JRadioButton xhdpiRadioBtn = new JRadioButton("xhdpi");
+		JRadioButton xhdpiRadioBtn = new JRadioButton(DPIName.xhdpi.getName());
 
-		JRadioButton xxhdpiRadioBtn = new JRadioButton("xxhdpi");
+		JRadioButton xxhdpiRadioBtn = new JRadioButton(DPIName.xxhdpi.getName());
 
-		JRadioButton tvdpiRadioBtn = new JRadioButton("tvdpi");
+		JRadioButton tvdpiRadioBtn = new JRadioButton(DPIName.tvdpi.getName());
 
 		dpiButtonGroup = new ButtonGroup();
 		dpiButtonGroup.add(ldpiRadioBtn);
@@ -385,15 +298,15 @@ public class MainWindow {
 						"Please select image files or directory", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
-				String selectedDpi = getDpiSelectedButtonText();
-				if (StringUtils.isBlank(selectedDpi)) {
+				String selectedDpiText = getDpiSelectedButtonText();
+				if (StringUtils.isBlank(selectedDpiText)) {
 					JOptionPane.showMessageDialog(mainWindow,
 							"Please select original image dpi", "Wraning",
 							JOptionPane.WARNING_MESSAGE);
-				} else if (!selectedDpi.equals("ldpi")) {
+				} else if (!selectedDpiText.equals(DPIName.ldpi.getName())) {
 					Enumeration<File> imgFiles = (Enumeration<File>) imgFileListModel
 							.elements();
-					boolean result = imageResize(imgFiles, selectedDpi);
+					boolean result = ImageResizeUtil.resize(imgFiles, DPIFactory.create(DPIName.valueOf(selectedDpiText)));
 					if (result) {
 						JOptionPane.showMessageDialog(mainWindow,
 								"Image resize work done.", "Info",
@@ -403,131 +316,13 @@ public class MainWindow {
 								"Image resize work fail.", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
-				} else if (selectedDpi.equals("ldpi")) {
+				} else if (selectedDpiText.equals(DPIName.ldpi.getName())) {
 					JOptionPane.showMessageDialog(mainWindow,
 							"Do not resize ldpi images", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param imgFiles
-	 * @param selectedDpi
-	 * @return
-	 */
-	protected boolean imageResize(Enumeration<File> imgFiles, String selectedDpi) {
-		if (imgFiles == null) {
-			return false;
-		}
-
-		int idx = dpisModel.indexOf(selectedDpi);
-		for (int i = 0; i <= idx; i++) {
-			dpisModel.remove(0);
-		}
-
-		boolean result = false;
-		while (imgFiles.hasMoreElements()) {
-			File imgFile = imgFiles.nextElement();
-			BufferedImage oriImage = null;
-			try {
-				oriImage = ImageIO.read(imgFile);
-				if (oriImage != null) {
-					ImageInputStream iis = ImageIO
-							.createImageInputStream(imgFile);
-					Iterator<ImageReader> iter = ImageIO.getImageReaders(iis);
-
-					ImageReader reader = null;
-					if (iter != null && iter.hasNext()) {
-						reader = iter.next();
-					}
-
-					Map<String, Integer> dimension = null;
-
-					int count = 0;
-					for (String dpi : dpisModel) {
-						String newDirectoryName = imgFile.getParent()
-								+ File.separator + dpi;
-
-						File outputDir = new File(newDirectoryName);
-						if (!outputDir.exists() && !outputDir.mkdir()) {
-							JOptionPane.showMessageDialog(mainWindow,
-									"Make directory failed", "Error",
-									JOptionPane.ERROR_MESSAGE);
-							return false;
-						}
-
-						File outputFile = new File(newDirectoryName,
-								imgFile.getName());
-
-						dimension = reCalculateSize(
-								oriImage.getWidth(),
-								oriImage.getHeight(),
-								dpisCalModel.get(selectedDpi).get(count),
-								selectedDpi.equals("mdpi") && count == 0 ? false
-										: true);
-
-						Image newImage = oriImage.getScaledInstance(
-								dimension.get("width"),
-								dimension.get("height"), Image.SCALE_SMOOTH);
-
-						result = ImageIO.write(
-								convertingImageToBufferedImage(newImage,
-										dimension.get("width"),
-										dimension.get("height")), reader
-										.getFormatName(), outputFile);
-						count++;
-					}
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				return false;
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * @param width
-	 * @param height
-	 * @param number
-	 * @param div
-	 * @return
-	 */
-	protected Map<String, Integer> reCalculateSize(int width, int height,
-			double number, boolean div) {
-		Double widthResult = null;
-		Double heightResul = null;
-		if (div) {
-			widthResult = width / number;
-			heightResul = height / number;
-		} else {
-			widthResult = width * number;
-			heightResul = height * number;
-		}
-		Long lwResult = Math.round(widthResult);
-		Long lhResult = Math.round(heightResul);
-		Map<String, Integer> dimension = new HashMap<String, Integer>();
-		dimension.put("width", lwResult.intValue());
-		dimension.put("height", lhResult.intValue());
-		return dimension;
-	}
-
-	/**
-	 * @param image
-	 * @param width
-	 * @param height
-	 * @return
-	 */
-	protected BufferedImage convertingImageToBufferedImage(Image image,
-			int width, int height) {
-		BufferedImage after = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics bg = after.getGraphics();
-		bg.drawImage(image, 0, 0, null);
-		bg.dispose();
-		return after;
 	}
 
 	protected class ImageFileListActionMouseListener extends MouseAdapter {
