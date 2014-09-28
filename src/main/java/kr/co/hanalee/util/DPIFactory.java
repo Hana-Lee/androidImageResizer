@@ -7,20 +7,27 @@ import kr.co.hanalee.model.*;
  */
 public class DPIFactory {
 
+	private static XXHDPI xxhdpi = new XXHDPI();
+	private static XHDPI xhdpi = new XHDPI();
+	private static HDPI hdpi = new HDPI();
+	private static MDPI mdpi = new MDPI();
+	private static LDPI ldpi = new LDPI();
+	private static TVDPI tvdpi = new TVDPI();
+
 	public static DPI create(DPIName dpiName) {
 		switch (dpiName) {
 			case xxhdpi:
-				return new XXHDPI();
+				return xxhdpi;
 			case xhdpi:
-				return new XHDPI();
+				return xhdpi;
 			case hdpi:
-				return new HDPI();
+				return hdpi;
 			case mdpi:
-				return new MDPI();
+				return mdpi;
 			case ldpi:
-				return new LDPI();
+				return ldpi;
 			case tvdpi:
-				return new TVDPI();
+				return tvdpi;
 			default:
 				break;
 		}
