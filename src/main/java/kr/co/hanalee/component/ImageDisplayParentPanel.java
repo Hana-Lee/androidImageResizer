@@ -5,7 +5,9 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
 /**
- * Created by Hana Lee on 2014. 9. 29..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class ImageDisplayParentPanel extends JPanel {
 

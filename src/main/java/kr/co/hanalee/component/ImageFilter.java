@@ -1,20 +1,17 @@
 package kr.co.hanalee.component;
 
-import java.io.File;
-
-import javax.swing.filechooser.FileFilter;
-
 import kr.co.hanalee.util.Utils;
 
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+
 /**
- * @author HanaLee <voyaging.hana@gmail.com>
- * 
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class ImageFilter extends FileFilter implements java.io.FileFilter {
 
-	/**
-	 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-	 */
 	@Override
 	public boolean accept(File f) {
 		if (f.isDirectory()) {
@@ -34,9 +31,6 @@ public class ImageFilter extends FileFilter implements java.io.FileFilter {
 		return false;
 	}
 
-	/**
-	 * @see javax.swing.filechooser.FileFilter#getDescription()
-	 */
 	@Override
 	public String getDescription() {
 		return "multiple png, jpg, jpeg or single directory";

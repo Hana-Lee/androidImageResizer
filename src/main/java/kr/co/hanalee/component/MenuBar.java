@@ -9,7 +9,9 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by Hana Lee on 2014. 9. 29..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class MenuBar extends JMenuBar {
 

@@ -1,22 +1,18 @@
 package kr.co.hanalee.util;
 
+import javax.swing.*;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-
 /**
- * @author HanaLee <voyaging.hana@gmail.com>
- * 
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class Utils {
 	public final static String jpeg = "jpeg";
 	public final static String jpg = "jpg";
 	public final static String png = "png";
 
-	/**
-	 * @param f
-	 * @return
-	 */
 	public static String getExtension(File f) {
 		String ext = null;
 		String s = f.getName();
@@ -28,10 +24,6 @@ public class Utils {
 		return ext;
 	}
 
-	/**
-	 * @param path
-	 * @return
-	 */
 	public static ImageIcon createImageIcon(String path) {
 		java.net.URL imgURL = Utils.class.getResource(path);
 		if (imgURL != null) {

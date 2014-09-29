@@ -15,7 +15,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Hana Lee on 2014. 9. 29..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class ImageFileChooseDialog extends JFileChooser {
 
@@ -96,7 +98,7 @@ public class ImageFileChooseDialog extends JFileChooser {
 	}
 
 	protected void makeImageList(File[] imgFiles) {
-		DefaultListModel defaultListModel = new DefaultListModel();
+		DefaultListModel<String> defaultListModel = new DefaultListModel<String>();
 		for (File imgFile : imgFiles) {
 			try {
 				if (imgFile.isDirectory()) {

@@ -6,9 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
- * Created by Hana Lee on 2014. 9. 29..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class RenderContext {
 
@@ -24,8 +27,8 @@ public class RenderContext {
 	private ImageDisplayParentPanel imageDisplayParentPanel;
 	private ImageDisplayPanel imageDisplayPanel;
 
-	private JList imageFileList;
-	private DefaultListModel imageFileListModel;
+	private ImageFileList imageFileList;
+	private DefaultListModel<File> imageFileListModel;
 
 	private Font defaultFont;
 	private String defaultFontName;
@@ -143,25 +146,25 @@ public class RenderContext {
 		this.imageDisplayParentPanel = imageDisplayParentPanel;
 	}
 
-	public JList getImageFileList() {
+	public ImageFileList getImageFileList() {
 		if (imageFileList == null) {
 			this.imageFileList = new ImageFileList(this);
 		}
 		return imageFileList;
 	}
 
-	public void setImageFileList(JList imageFileList) {
+	public void setImageFileList(ImageFileList imageFileList) {
 		this.imageFileList = imageFileList;
 	}
 
-	public DefaultListModel getImageFileListModel() {
+	public DefaultListModel<File> getImageFileListModel() {
 		if (imageFileListModel == null) {
-			this.imageFileListModel = new DefaultListModel();
+			this.imageFileListModel = new DefaultListModel<File>();
 		}
 		return imageFileListModel;
 	}
 
-	public void setImageFileListModel(DefaultListModel imageFileListModel) {
+	public void setImageFileListModel(DefaultListModel<File> imageFileListModel) {
 		this.imageFileListModel = imageFileListModel;
 	}
 

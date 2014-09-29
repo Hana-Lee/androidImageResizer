@@ -6,13 +6,12 @@ import kr.co.hanalee.context.RenderContext;
 import java.awt.*;
 
 /**
- * @author HanaLee <voyaging.hana@gmail.com>
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class Resizer {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override

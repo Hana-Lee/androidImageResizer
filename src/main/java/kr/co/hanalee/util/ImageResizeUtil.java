@@ -20,7 +20,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by Hana Lee on 2014. 9. 28..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 28..
  */
 public class ImageResizeUtil {
 

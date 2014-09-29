@@ -1,19 +1,15 @@
 package kr.co.hanalee.component;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-
 /**
- * @author HanaLee <voyaging.hana@gmail.com>
- * 
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class ImagePreview extends JComponent implements PropertyChangeListener {
 
@@ -22,9 +18,6 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
 	ImageIcon thumbnail = null;
 	File file = null;
 
-	/**
-	 * @param fc
-	 */
 	public ImagePreview(JFileChooser fc) {
 		setPreferredSize(new Dimension(100, 50));
 		fc.addPropertyChangeListener(this);
@@ -47,9 +40,6 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
 		}
 	}
 
-	/**
-	 * @see java.beans.PropertyChangeListener#propertyChange(java.beans.PropertyChangeEvent)
-	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		boolean update = false;

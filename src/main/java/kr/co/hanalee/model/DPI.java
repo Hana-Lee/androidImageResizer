@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *
  * Created by Hana Lee on 2014. 9. 26..
  * <p/>
  * 현재 선택된 원본 DPI 를 위한 추상 클래스

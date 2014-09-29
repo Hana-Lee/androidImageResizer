@@ -8,6 +8,8 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
 /**
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *
  * Created by Hana Lee on 2014. 9. 29..
  */
 public class DPIButtonsPanel extends JPanel {

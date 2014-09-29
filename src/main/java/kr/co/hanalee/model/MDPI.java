@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *
  * Created by Hana Lee on 2014. 9. 28..
  */
 public class MDPI extends DPI {

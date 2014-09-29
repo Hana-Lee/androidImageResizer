@@ -1,10 +1,12 @@
 package kr.co.hanalee.util;
 
 /**
- * Created by Hana Lee on 2014. 9. 28..
- * <p/>
- * 어플리케이션에서 공통으로 참조할 DPI 의 이름을 enum 으로 정의하여
- * DPI 이름 변경에 대해 최소의 수정을 보장한다.
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 28..
+ *         <p>
+ *         어플리케이션에서 공통으로 참조할 DPI 의 이름을 enum 으로 정의하여
+ *         DPI 이름 변경에 대해 최소의 수정을 보장한다.
  */
 public enum DPIName {
 

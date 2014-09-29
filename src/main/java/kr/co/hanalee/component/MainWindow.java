@@ -5,7 +5,9 @@ import kr.co.hanalee.context.RenderContext;
 import javax.swing.*;
 
 /**
- * @author HanaLee <voyaging@leehana.co.kr>
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
 public class MainWindow {
 

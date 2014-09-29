@@ -12,10 +12,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.Enumeration;
 
 /**
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *     
  * Created by Hana Lee on 2014. 9. 29..
  */
 public class ButtonsPanel extends JPanel {
@@ -61,10 +62,6 @@ public class ButtonsPanel extends JPanel {
 
 	protected class ConvertButtonActionMouseListener extends MouseAdapter {
 
-		/**
-		 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
-		 */
-		@SuppressWarnings("unchecked")
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (context.getImageFileListModel() == null || context.getImageFileListModel().isEmpty()) {
@@ -78,7 +75,7 @@ public class ButtonsPanel extends JPanel {
 							"Please select original image dpi", "Wraning",
 							JOptionPane.WARNING_MESSAGE);
 				} else if (!selectedDpiText.equals(DPIName.ldpi.getName())) {
-					Enumeration<File> imgFiles = (Enumeration<File>) context.getImageFileListModel()
+					Enumeration imgFiles = context.getImageFileListModel()
 							.elements();
 					ImageResizeUtil.resize(imgFiles,
 							DPIFactory.create(DPIName.valueOf(selectedDpiText)), context);

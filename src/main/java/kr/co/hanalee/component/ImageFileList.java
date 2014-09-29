@@ -14,9 +14,11 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by Hana Lee on 2014. 9. 29..
+ * @author <a href="mailto:voyaging@leehana.co.kr">Hana Lee</a>
+ *         <p>
+ *         Created by Hana Lee on 2014. 9. 29..
  */
-public class ImageFileList extends JList {
+public class ImageFileList extends JList<String> {
 
 	private RenderContext context;
 
@@ -38,8 +40,8 @@ public class ImageFileList extends JList {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			JList fileList = (JList) e.getSource();
-			final File imgFile = (File) context.getImageFileListModel().getElementAt(fileList
-					.getSelectedIndex());
+			int selectedIndex = fileList.getSelectedIndex();
+			File imgFile = context.getImageFileListModel().getElementAt(selectedIndex);
 
 			BufferedImage selectedImage = null;
 			try {
